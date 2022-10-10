@@ -17,6 +17,24 @@ export default class Phonebook extends Component {
         filter: '',
       }
 
+    componentDidMount() {
+    console.log('Record')
+    const contacts = localStorage.getItem('contacts')
+    const parsedContacts = JSON.parse(contacts)
+
+    if (parsedContacts) {
+        this.setState({ contacts: parsedContacts})
+    }
+    
+}
+
+    componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+    console.log('Update Phonebook')
+    localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+    }
+}
+
 addContact = (contact) => {
     if (this.isDublicate(contact)){
     return Notiflix.Notify.warning(`${contact.name} - ${contact.number} is already in contact`)
@@ -68,24 +86,22 @@ getFilteredContacts() {
     return filteredContacts;
 }
 
-    render() {
-        const { addContact, removeContact, changeFilter } = this;
-        const { filter } = this.state;
-        const contacts = this.getFilteredContacts();
-        return (
-            <div className={css.container}>
-            <div className={css.phonebook}>
-                <h2>Phoneboook</h2>
-                <PhonebookAdd onSubmit={addContact}/>
-            </div>
-            <div className={css.contacts}>
-                <h2>Contacts</h2>
-                <Filter value={filter} onChangeFilter={changeFilter} />
-                <Contactlist items={contacts} removeContact={removeContact}/>
-            </div>
-            </div>
-        )
-    }
+render() {
+    const { addContact, removeContact, changeFilter } = this;
+    const { filter } = this.state;
+    const contacts = this.getFilteredContacts();
+    return (
+        <div className={css.container}>
+        <div className={css.phonebook}>
+            <h2>Phoneboook</h2>
+            <PhonebookAdd onSubmit={addContact}/>
+        </div>
+        <div className={css.contacts}>
+            <h2>Contacts</h2>
+            <Filter value={filter} onChangeFilter={changeFilter} />
+            <Contactlist items={contacts} removeContact={removeContact}/>
+        </div>
+        </div>
+    )
 }
-
-
+}
