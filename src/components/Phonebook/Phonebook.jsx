@@ -37,7 +37,7 @@ export default class Phonebook extends Component {
 
 addContact = (contact) => {
     if (this.isDublicate(contact)){
-    return Notiflix.Notify.warning(`${contact.name} - ${contact.number} is already in contact`)
+    return Notiflix.Notify.warning(`${contact.name} or ${contact.number} is already in contact`)
     }
     this.setState((prev) => {
     const newContact = {
@@ -65,7 +65,7 @@ changeFilter = (filter) => {
 
 isDublicate({name, number}) {
     const { contacts } = this.state;
-    const result = contacts.find((item) => item.name === name && item.number === number);
+    const result = contacts.find((item) => item.name.toLocaleLowerCase() === name.toLocaleLowerCase() || item.number === number);
     return result;
 }
 
